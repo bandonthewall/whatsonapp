@@ -198,23 +198,39 @@ const decode = s => { decoder.innerHTML = String(s ?? ""); return decoder.value.
 const MONTHS = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
 const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
-function parseWhen(dateStr, timeStr){
+/* The feed gives dates without a year ("Wed 21 Oct"), so we read day, month and time here
+   and work out the year afterwards from the feed's date order (see assignYears). */
+function parseParts(dateStr, timeStr){
   const m = /(\d{1,2})\s+([A-Za-z]{3})/.exec(dateStr || "");
   if (!m) return null;
   const mi = MONTHS.indexOf(m[2].toLowerCase());
   if (mi < 0) return null;
-  const today = startOfDay(new Date());
-  const d = new Date(today.getFullYear(), mi, +m[1]);
-  if (d < today - 45 * 864e5) d.setFullYear(d.getFullYear() + 1); // listings for next year
+  let h = 0, min = 0;
   const t = /(\d{1,2})[.:](\d{2})\s*(AM|PM)/i.exec(timeStr || "");
-  if (t){ let h = +t[1] % 12; if (t[3].toUpperCase() === "PM") h += 12; d.setHours(h, +t[2]); }
-  return d;
+  if (t){ h = +t[1] % 12; if (t[3].toUpperCase() === "PM") h += 12; min = +t[2]; }
+  return { day: +m[1], mi, h, min };
+}
+/* Events arrive in date order, so each time the month jumps back (e.g. Dec to Jan) we move into the next year. */
+function assignYears(list){
+  const today = startOfDay(new Date());
+  let year = null, prevMi = null;
+  for (const e of list){
+    const p = e.parts;
+    if (!p){ e.when = null; continue; }
+    if (year === null){
+      year = today.getFullYear();
+      if (new Date(year, p.mi, p.day) < today - 45 * 864e5) year++;
+    } else if (prevMi - p.mi >= 6){
+      year++;
+    }
+    prevMi = p.mi;
+    e.when = new Date(year, p.mi, p.day, p.h, p.min).getTime();
+  }
 }
 function niceTime(t){ return (t || "").replace(/\.00/, "").replace(/\s*(AM|PM)/i, (_, p) => p.toLowerCase()); }
 function cleanUrl(u){ u = (u || "").trim(); return /^https?:\/\//i.test(u) ? u : null; }
 
 function normalise(r){
-  const when = parseWhen(r.event_start_date, r.event_start_time);
   const venue = decode(r.event_venue || (r.venue && r.venue.name) || "");
   return {
     id: r.ID,
@@ -232,7 +248,8 @@ function normalise(r){
     dateLabel: r.event_start_date || "",
     timeLabel: r.event_start_time || "",
     venue, venueKey: venue.toLowerCase(),
-    when: when ? when.getTime() : null
+    parts: parseParts(r.event_start_date, r.event_start_time),
+    when: null
   };
 }
 
@@ -366,10 +383,11 @@ function renderList(){
     const label = !d ? "Date tbc"
       : key === today ? "Tonight"
       : key === today + 864e5 ? "Tomorrow"
-      : d.toLocaleDateString("en-GB", { weekday: "short" }) + " " + d.toLocaleDateString("en-GB", { month: "short" });
+      : d.toLocaleDateString("en-GB", { weekday: "short" }) + " " + d.toLocaleDateString("en-GB", { month: "short" })
+        + (d.getFullYear() !== new Date().getFullYear() ? " " + d.getFullYear() : "");
     html += `<section class="day${key === today ? " today" : ""}">
       <div class="daylabel" aria-hidden="true"><div class="daynum">${d ? d.getDate() : "–"}</div><div class="dayname">${esc(label)}</div></div>
-      <div class="events"><h2 class="sr">${d ? esc(d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })) : "Date to be confirmed"}</h2>${evs.map(cardHTML).join("")}</div>
+      <div class="events"><h2 class="sr">${d ? esc(d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })) : "Date to be confirmed"}</h2>${evs.map(cardHTML).join("")}</div>
     </section>`;
   }
   if (S.view === "all" && S.loading) html += `<p class="loadnote">Loading more dates…</p>`;
@@ -386,7 +404,9 @@ function clearFilters(){
 const contentCache = new Map();
 function longDate(e){
   if (e.when == null) return e.dateLabel;
-  return new Date(e.when).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+  const d = new Date(e.when), opts = { weekday: "long", day: "numeric", month: "long" };
+  if (d.getFullYear() !== new Date().getFullYear()) opts.year = "numeric";
+  return d.toLocaleDateString("en-GB", opts);
 }
 function openEvent(id, push = true){
   const e = S.byId.get(+id) || S.saved[id];
@@ -575,8 +595,9 @@ function addRows(rows){
   for (const r of rows){
     if (!r || r.ID == null || S.byId.has(r.ID)) continue;
     const e = normalise(r); S.byId.set(e.id, e); S.events.push(e);
-    if (S.saved[e.id]) S.saved[e.id] = e; // keep saved copies fresh
   }
+  assignYears(S.events); // S.events stays in feed order
+  for (const e of S.events) if (S.saved[e.id]) S.saved[e.id] = e; // keep saved copies fresh
 }
 async function init(){
   S.loading = true; S.error = null; renderChips(); renderList();
