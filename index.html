@@ -67,6 +67,8 @@ header.top :focus-visible{outline-color:#fff}
 .chip{flex:none;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:999px;padding:6px 12px;font-size:.88rem;font-weight:500;cursor:pointer;white-space:nowrap}
 .chip[aria-pressed="true"]{background:#fff;border-color:#fff;color:var(--brand);font-weight:600}
 select.chip option{color:#000;background:#fff}
+.chip.clear{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border-color:transparent;font-weight:600}
+.chips[hidden]{display:none}
 select.chip{appearance:none;-webkit-appearance:none;padding-right:28px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px;background-repeat:no-repeat}
 select.chip.on{background-color:#fff;color:var(--brand);border-color:#fff;font-weight:600}
 
@@ -181,6 +183,8 @@ main{padding:4px 16px 40px}
 const API = "https://bandonthewall.org/wp-json";
 const FEED = API + "/botw/v1/whats-on";
 const FILTERS = API + "/botw/v1/whats-on-filters";
+/* Venue names left out of the filter buttons (not case-sensitive). Their events still appear in the listings. */
+const HIDDEN_VENUES = ["main", "main room", "basement", "yes deaf institute", "yes deaf insitute"];
 
 /* ---------- State ---------- */
 const S = {
@@ -318,11 +322,21 @@ function visibleEvents(){
 }
 
 /* ---------- Rendering ---------- */
+function filtersActive(){
+  return !!(S.q || (S.view === "all" && (S.when || S.free || S.venue || S.genre)));
+}
 function renderChips(){
   const el = $("#chips");
-  if (S.view === "saved"){ el.innerHTML = ""; measureHead(); return; }
-  const venues = [...new Map(S.events.map(e => [e.venueKey, e.venue])).entries()].filter(([k]) => k);
-  let html = `
+  const keepScroll = el.scrollLeft;
+  const clear = filtersActive()
+    ? `<button class="chip clear" data-clear aria-label="Clear search and filters"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Clear</button>`
+    : "";
+  if (S.view === "saved"){ el.innerHTML = clear; el.hidden = !clear; measureHead(); return; }
+  el.hidden = false;
+  const hidden = new Set(HIDDEN_VENUES.map(v => v.trim().toLowerCase()));
+  const venues = [...new Map(S.events.map(e => [e.venueKey, e.venue])).entries()]
+    .filter(([k]) => k && !hidden.has(k.trim()));
+  let html = clear + `
     <button class="chip" data-when="tonight" aria-pressed="${S.when === "tonight"}">Tonight</button>
     <button class="chip" data-when="weekend" aria-pressed="${S.when === "weekend"}">This weekend</button>
     <button class="chip" data-free aria-pressed="${S.free}">Free</button>`;
@@ -334,6 +348,7 @@ function renderChips(){
   }
   html += venues.map(([k, name]) => `<button class="chip" data-venue="${esc(k)}" aria-pressed="${S.venue === k}">${esc(name)}</button>`).join("");
   el.innerHTML = html;
+  el.scrollLeft = clear ? keepScroll : el.scrollLeft;
   measureHead();
 }
 function measureHead(){ document.documentElement.style.setProperty("--head", $("#top").offsetHeight + 4 + "px"); }
@@ -397,7 +412,7 @@ function renderList(){
 
 function clearFilters(){
   S.q = ""; $("#q").value = ""; S.when = null; S.free = false; S.venue = null; S.genre = ""; S.genreIds = null;
-  renderChips(); renderList();
+  renderChips(); renderList(); window.scrollTo({ top: 0 });
 }
 
 /* ---------- Detail ---------- */
@@ -563,6 +578,7 @@ async function applyGenre(value){
 /* ---------- Events ---------- */
 $("#chips").addEventListener("click", ev => {
   const b = ev.target.closest("button.chip"); if (!b) return;
+  if ("clear" in b.dataset){ clearFilters(); return; }
   if (b.dataset.when) S.when = S.when === b.dataset.when ? null : b.dataset.when;
   else if ("free" in b.dataset) S.free = !S.free;
   else if (b.dataset.venue) S.venue = S.venue === b.dataset.venue ? null : b.dataset.venue;
@@ -571,7 +587,11 @@ $("#chips").addEventListener("click", ev => {
 $("#chips").addEventListener("change", ev => { if (ev.target.id === "genre") applyGenre(ev.target.value); });
 $("#list").addEventListener("click", ev => { const c = ev.target.closest(".ev[data-id]"); if (c) openEvent(c.dataset.id); });
 let qTimer;
-$("#q").addEventListener("input", ev => { clearTimeout(qTimer); qTimer = setTimeout(() => { S.q = ev.target.value.trim(); renderList(); }, 120); });
+$("#q").addEventListener("input", ev => { clearTimeout(qTimer); qTimer = setTimeout(() => {
+  const was = filtersActive(); S.q = ev.target.value.trim();
+  if (was !== filtersActive()) renderChips();
+  renderList();
+}, 120); });
 function setView(v){
   S.view = v;
   $("#tab-all").setAttribute("aria-selected", v === "all");
