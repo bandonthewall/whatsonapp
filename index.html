@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Band on the Wall – What’s On</title>
+<meta name="description" content="What’s on at Band on the Wall, Manchester.">
+<meta name="theme-color" content="#283558">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BOTW">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#283558;
+  --bg:#F4F5F8; --surface:#FFFFFF; --ink:#000000; --muted:#5A6075; --line:#DCDFE7;
+  --accent:#283558; --on-accent:#FFFFFF; --accent-soft:#E3E7F0; --grey-soft:#E9EBF0;
+  --font:"Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --surface:#11141D; --ink:#FFFFFF; --muted:#A4A9BA; --line:#262B3A;
+    --accent:#FFFFFF; --on-accent:#283558; --accent-soft:#283558; --grey-soft:#1E2230;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --surface:#11141D; --ink:#FFFFFF; --muted:#A4A9BA; --line:#262B3A;
+  --accent:#FFFFFF; --on-accent:#283558; --accent-soft:#283558; --grey-soft:#1E2230;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--brand)}
+img{max-width:100%;display:block}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:640px;margin:0 auto}
+
+/* Header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--brand);color:#fff;padding:12px 16px 12px}
+header.top :focus-visible{outline-color:#fff}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{flex:1 1 auto;min-width:0;display:flex;align-items:center;font-stretch:68%;font-weight:800;font-size:1.4rem;line-height:1;margin:0;color:#fff}
+.logo{display:block;width:100%;max-width:240px;height:auto;max-height:40px;object-fit:contain;object-position:left center}
+.tabs{flex:none}
+.tabs{display:flex;gap:4px;background:rgba(255,255,255,.14);border-radius:999px;padding:3px}
+.tabs button{border:0;background:none;padding:6px 12px;border-radius:999px;font-weight:600;font-size:.88rem;color:rgba(255,255,255,.8);cursor:pointer}
+.tabs button[aria-selected="true"]{background:#fff;color:var(--brand)}
+.search{margin-top:12px;position:relative}
+.search input{width:100%;border:1px solid transparent;background:rgba(255,255,255,.14);color:#fff;border-radius:12px;padding:10px 12px 10px 38px;font-size:1rem}
+.search input::placeholder{color:rgba(255,255,255,.7)}
+.search input:focus{background:rgba(255,255,255,.2);outline:none;border-color:rgba(255,255,255,.6)}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.75)}
+.chips{display:flex;gap:8px;overflow-x:auto;margin:10px -16px 0;padding:0 16px 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:999px;padding:6px 12px;font-size:.88rem;font-weight:500;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:#fff;border-color:#fff;color:var(--brand);font-weight:600}
+select.chip option{color:#000;background:#fff}
+select.chip{appearance:none;-webkit-appearance:none;padding-right:28px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+select.chip.on{background-color:#fff;color:var(--brand);border-color:#fff;font-weight:600}
+
+/* List */
+main{padding:4px 16px 40px}
+.day{display:grid;grid-template-columns:58px 1fr;gap:0 12px;padding-top:18px}
+.daylabel{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--head,150px));align-self:start;padding-top:2px}
+.daynum{font-stretch:62%;font-weight:800;font-size:2.9rem;line-height:.85;letter-spacing:-.02em}
+.dayname{font-size:.8rem;font-weight:600;color:var(--muted);margin-top:4px}
+.day.today .daynum,.day.today .dayname{color:var(--accent)}
+.events{display:flex;flex-direction:column;gap:10px;min-width:0}
+.ev{display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;text-align:left;width:100%;cursor:pointer}
+.ev:active{transform:scale(.99)}
+.thumb{width:76px;height:76px;border-radius:9px;object-fit:cover;background:var(--grey-soft)}
+.evbody{min-width:0;padding:2px 2px 2px 0}
+.evtitle{font-weight:700;font-size:1rem;line-height:1.2;margin:0;overflow-wrap:anywhere}
+.evtag{color:var(--muted);font-size:.88rem;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evmeta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:6px;font-size:.82rem;font-weight:600}
+.evmeta .time{color:var(--ink)}
+.evmeta .venue{color:var(--muted);font-weight:500}
+.pill{font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:999px}
+.pill.sold{background:var(--grey-soft);color:var(--muted)}
+.pill.free{background:var(--accent-soft);color:var(--ink)}
+.pill.tag{background:var(--accent-soft);color:var(--ink)}
+.ev.soldout .thumb{filter:grayscale(1);opacity:.7}
+
+.state{padding:48px 8px;text-align:center;color:var(--muted)}
+.state h2{color:var(--ink);font-size:1.15rem;margin:0 0 6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:13px 18px;font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--accent);color:var(--on-accent)}
+.btn.secondary{background:var(--grey-soft);color:var(--ink)}
+.btn[disabled]{opacity:.55;cursor:default}
+.skeleton .ev{pointer-events:none}
+.skeleton .thumb,.skeleton .bar{background:var(--grey-soft);border-radius:6px}
+.skeleton .bar{height:12px;margin:6px 0}
+.loadnote{text-align:center;color:var(--muted);font-size:.85rem;padding:20px 0 0}
+
+/* Detail */
+.sheet{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+.sheet.open{transform:none;visibility:visible}
+.sheetbar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 10px;background:linear-gradient(var(--bg) 60%,transparent)}
+.iconbtn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer}
+.iconbtn[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+.detail{max-width:640px;margin:0 auto;padding:0 16px calc(110px + env(safe-area-inset-bottom,0px))}
+.hero{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:18px;background:var(--grey-soft)}
+.dtitle{font-stretch:72%;font-weight:800;font-size:2.2rem;line-height:1;letter-spacing:-.01em;margin:18px 0 6px;overflow-wrap:anywhere}
+.dtag{color:var(--muted);font-size:1.05rem;margin:0}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:18px 0;padding:14px 0;border-block:1px solid var(--line);font-size:.95rem}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0;font-weight:600}
+.copy{font-size:1rem;line-height:1.6;max-width:68ch}
+.copy p{margin:0 0 1em}
+.copy a{color:var(--accent)}
+.copy img,.copy iframe{border-radius:12px;max-width:100%}
+.copy iframe{width:100%;aspect-ratio:16/9;height:auto;border:0}
+.copy h2,.copy h3{font-stretch:80%;font-size:1.2rem;margin:1.4em 0 .4em}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.actions .btn{flex:1 1 auto}
+.buybar{position:fixed;left:0;right:0;bottom:0;z-index:41;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;transform:translateY(110%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.buybar.show{transform:none}
+.buybar .when{flex:1;min-width:0;font-size:.85rem;color:var(--muted)}
+.buybar .when strong{display:block;color:var(--ink);font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.buybar .btn{min-width:130px}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.9rem;font-weight:600;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion: reduce){.sheet,.buybar{transition:none}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="brandrow">
+      <h1 class="brand"><img class="logo" src="logo.png" alt="Band on the Wall" onerror="this.replaceWith(document.createTextNode('Band on the Wall'))"></h1>
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tab-all" aria-selected="true">What’s on</button>
+        <button role="tab" id="tab-saved" aria-selected="false">Saved</button>
+      </div>
+    </div>
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <label for="q" class="sr">Search events</label>
+      <input id="q" type="search" placeholder="Search artists and events" autocomplete="off" enterkeyhint="search">
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+</header>
+
+<main class="wrap" id="list" aria-live="polite"></main>
+
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="dtitle">
+  <div class="sheetbar">
+    <button class="iconbtn" id="closeBtn" aria-label="Back to listings">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <div style="display:flex;gap:8px">
+      <button class="iconbtn" id="shareBtn" aria-label="Share event">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="m7 8 5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+      </button>
+      <button class="iconbtn" id="saveBtn" aria-label="Save event" aria-pressed="false">
+        <svg width="19" height="19" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path id="saveIcon" fill="none" d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2Z"/></svg>
+      </button>
+    </div>
+  </div>
+  <article class="detail" id="detail"></article>
+</section>
+<div class="buybar" id="buybar"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ---------- Config ---------- */
+const API = "https://bandonthewall.org/wp-json";
+const FEED = API + "/botw/v1/whats-on";
+const FILTERS = API + "/botw/v1/whats-on-filters";
+
+/* ---------- State ---------- */
+const S = {
+  events: [], byId: new Map(), total: 0, loading: true, error: null, partial: false,
+  view: "all", q: "", when: null, free: false, venue: null,
+  genreParam: null, genres: [], genre: "", genreIds: null,
+  saved: loadSaved(), openId: null
+};
+
+/* ---------- Helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const decoder = document.createElement("textarea");
+const decode = s => { decoder.innerHTML = String(s ?? ""); return decoder.value.trim(); };
+const MONTHS = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+function parseWhen(dateStr, timeStr){
+  const m = /(\d{1,2})\s+([A-Za-z]{3})/.exec(dateStr || "");
+  if (!m) return null;
+  const mi = MONTHS.indexOf(m[2].toLowerCase());
+  if (mi < 0) return null;
+  const today = startOfDay(new Date());
+  const d = new Date(today.getFullYear(), mi, +m[1]);
+  if (d < today - 45 * 864e5) d.setFullYear(d.getFullYear() + 1); // listings for next year
+  const t = /(\d{1,2})[.:](\d{2})\s*(AM|PM)/i.exec(timeStr || "");
+  if (t){ let h = +t[1] % 12; if (t[3].toUpperCase() === "PM") h += 12; d.setHours(h, +t[2]); }
+  return d;
+}
+function niceTime(t){ return (t || "").replace(/\.00/, "").replace(/\s*(AM|PM)/i, (_, p) => p.toLowerCase()); }
+function cleanUrl(u){ u = (u || "").trim(); return /^https?:\/\//i.test(u) ? u : null; }
+
+function normalise(r){
+  const when = parseWhen(r.event_start_date, r.event_start_time);
+  const venue = decode(r.event_venue || (r.venue && r.venue.name) || "");
+  return {
+    id: r.ID,
+    title: decode(r.post_title),
+    tagline: decode(r.event_excerpt),
+    summary: decode((r.post_excerpt || "").replace(/\s*\[&hellip;\]|\s*\[…\]/g, "…")),
+    img1: r.event_image_sizes?.["1x"] || r.post_thumbnail || "",
+    img2: r.event_image_sizes?.["2x"] || r.post_thumbnail || "",
+    url: cleanUrl(r.permalink),
+    buy: cleanUrl(r.event_buy_link),
+    buyText: decode(r.event_buy_text) || "Tickets",
+    soldOut: !!+r.event_sold_out,
+    free: !!+r.event_is_free,
+    tags: Array.isArray(r.event_availability_tags) ? r.event_availability_tags.map(t => decode(typeof t === "string" ? t : (t.name || t.label || ""))).filter(Boolean) : [],
+    dateLabel: r.event_start_date || "",
+    timeLabel: r.event_start_time || "",
+    venue, venueKey: venue.toLowerCase(),
+    when: when ? when.getTime() : null
+  };
+}
+
+async function getJSON(url){
+  const res = await fetch(url, { headers: { Accept: "application/json" } });
+  if (!res.ok) throw new Error(res.status + " " + res.statusText);
+  return res.json();
+}
+const withParams = (base, p) => base + (base.includes("?") ? "&" : "?") + new URLSearchParams(p);
+
+/* Fetch every page of the feed. Stops if the endpoint ignores ?page= (avoids duplicates). */
+async function fetchAll(params = {}, onFirst){
+  const first = await getJSON(withParams(FEED, { ...params, page: 1 }));
+  const rows = [...(first.data || [])];
+  const meta = first.meta || {};
+  if (onFirst) onFirst(rows, meta);
+  const last = +meta.last_page || 1;
+  let partial = false;
+  if (last > 1){
+    const pages = await Promise.allSettled(
+      Array.from({ length: last - 1 }, (_, i) => getJSON(withParams(FEED, { ...params, page: i + 2 })))
+    );
+    for (const [i, p] of pages.entries()){
+      if (p.status !== "fulfilled"){ partial = true; continue; }
+      if (+p.value.meta?.current_page !== i + 2){ partial = true; break; }
+      rows.push(...(p.value.data || []));
+    }
+  }
+  return { rows, meta, partial };
+}
+
+/* ---------- Saved ---------- */
+function loadSaved(){ try { return JSON.parse(localStorage.getItem("botw-saved") || "{}") || {}; } catch { return {}; } }
+function persistSaved(){ try { localStorage.setItem("botw-saved", JSON.stringify(S.saved)); } catch {} }
+function toggleSaved(ev){
+  if (S.saved[ev.id]) { delete S.saved[ev.id]; toast("Removed from saved"); }
+  else { S.saved[ev.id] = ev; toast("Saved"); }
+  persistSaved(); renderList(); syncSaveBtn();
+}
+
+/* ---------- Filtering ---------- */
+function weekendRange(){
+  const t = startOfDay(new Date()), dow = t.getDay(); // 0 = Sunday
+  const start = new Date(t); if (![5, 6, 0].includes(dow)) start.setDate(t.getDate() + (5 - dow));
+  const end = new Date(t); end.setDate(t.getDate() + ((8 - dow) % 7 || 7)); // following Monday
+  return [start.getTime(), end.getTime()];
+}
+function visibleEvents(){
+  let list = S.view === "saved"
+    ? Object.values(S.saved).map(e => S.byId.get(e.id) || e)
+    : S.events;
+  const now = Date.now(), today = startOfDay(new Date()).getTime();
+  list = list.filter(e => e.when == null || e.when >= today);
+  if (S.view === "all"){
+    if (S.when === "tonight"){ const end = today + 864e5 + 5 * 36e5; list = list.filter(e => e.when != null && e.when < end && e.when >= today); }
+    if (S.when === "weekend"){ const [a, b] = weekendRange(); list = list.filter(e => e.when != null && e.when >= a && e.when < b); }
+    if (S.free) list = list.filter(e => e.free);
+    if (S.venue) list = list.filter(e => e.venueKey === S.venue);
+    if (S.genreIds) list = list.filter(e => S.genreIds.has(e.id));
+  }
+  if (S.q){
+    const q = S.q.toLowerCase();
+    list = list.filter(e => (e.title + " " + e.tagline + " " + e.summary + " " + e.venue).toLowerCase().includes(q));
+  }
+  return list.slice().sort((a, b) => (a.when ?? 9e15) - (b.when ?? 9e15));
+}
+
+/* ---------- Rendering ---------- */
+function renderChips(){
+  const el = $("#chips");
+  if (S.view === "saved"){ el.innerHTML = ""; measureHead(); return; }
+  const venues = [...new Map(S.events.map(e => [e.venueKey, e.venue])).entries()].filter(([k]) => k);
+  let html = `
+    <button class="chip" data-when="tonight" aria-pressed="${S.when === "tonight"}">Tonight</button>
+    <button class="chip" data-when="weekend" aria-pressed="${S.when === "weekend"}">This weekend</button>
+    <button class="chip" data-free aria-pressed="${S.free}">Free</button>`;
+  if (S.genreParam && S.genres.length){
+    html += `<label class="sr" for="genre">Genre</label><select id="genre" class="chip${S.genre ? " on" : ""}">
+      <option value="">All genres</option>
+      ${S.genres.map(g => `<option value="${esc(g.value)}"${g.value == S.genre ? " selected" : ""}>${esc(g.label)}</option>`).join("")}
+    </select>`;
+  }
+  html += venues.map(([k, name]) => `<button class="chip" data-venue="${esc(k)}" aria-pressed="${S.venue === k}">${esc(name)}</button>`).join("");
+  el.innerHTML = html;
+  measureHead();
+}
+function measureHead(){ document.documentElement.style.setProperty("--head", $("#top").offsetHeight + 4 + "px"); }
+
+function cardHTML(e){
+  const status = e.soldOut ? `<span class="pill sold">Sold out</span>` : e.free ? `<span class="pill free">Free</span>` : "";
+  const tags = e.tags.map(t => `<span class="pill tag">${esc(t)}</span>`).join("");
+  return `<button class="ev${e.soldOut ? " soldout" : ""}" data-id="${e.id}">
+    <img class="thumb" src="${esc(e.img1)}" srcset="${esc(e.img1)} 1x, ${esc(e.img2)} 2x" alt="" loading="lazy" decoding="async">
+    <div class="evbody">
+      <h3 class="evtitle">${esc(e.title)}</h3>
+      ${e.tagline ? `<p class="evtag">${esc(e.tagline)}</p>` : ""}
+      <div class="evmeta"><span class="time">${esc(niceTime(e.timeLabel))}</span><span class="venue">${esc(e.venue)}</span>${status}${tags}</div>
+    </div>
+  </button>`;
+}
+
+function renderList(){
+  const main = $("#list");
+  if (S.loading && !S.events.length){
+    main.innerHTML = `<div class="skeleton">${Array.from({ length: 4 }, () => `
+      <div class="day"><div></div><div class="events"><div class="ev"><div class="thumb"></div><div><div class="bar" style="width:70%"></div><div class="bar" style="width:45%"></div><div class="bar" style="width:30%"></div></div></div></div></div>`).join("")}</div>`;
+    return;
+  }
+  if (S.error && !S.events.length && S.view === "all"){
+    main.innerHTML = `<div class="state"><h2>Listings didn’t load</h2><p>Check your connection, then try again.</p><button class="btn primary" id="retry">Try again</button></div>`;
+    $("#retry").onclick = init; return;
+  }
+  const list = visibleEvents();
+  if (!list.length){
+    main.innerHTML = S.view === "saved" && !S.q
+      ? `<div class="state"><h2>No saved events yet</h2><p>Tap the heart on any event to keep it here.</p></div>`
+      : `<div class="state"><h2>Nothing matches</h2><p>Try a different search or clear the filters.</p><button class="btn secondary" id="clear">Clear filters</button></div>`;
+    const c = $("#clear"); if (c) c.onclick = clearFilters;
+    return;
+  }
+  const groups = new Map();
+  for (const e of list){
+    const key = e.when != null ? startOfDay(new Date(e.when)).getTime() : "tbc";
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(e);
+  }
+  const today = startOfDay(new Date()).getTime();
+  let html = "";
+  for (const [key, evs] of groups){
+    const d = key === "tbc" ? null : new Date(key);
+    const label = !d ? "Date tbc"
+      : key === today ? "Tonight"
+      : key === today + 864e5 ? "Tomorrow"
+      : d.toLocaleDateString("en-GB", { weekday: "short" }) + " " + d.toLocaleDateString("en-GB", { month: "short" });
+    html += `<section class="day${key === today ? " today" : ""}">
+      <div class="daylabel" aria-hidden="true"><div class="daynum">${d ? d.getDate() : "–"}</div><div class="dayname">${esc(label)}</div></div>
+      <div class="events"><h2 class="sr">${d ? esc(d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })) : "Date to be confirmed"}</h2>${evs.map(cardHTML).join("")}</div>
+    </section>`;
+  }
+  if (S.view === "all" && S.loading) html += `<p class="loadnote">Loading more dates…</p>`;
+  if (S.view === "all" && S.partial && !S.loading) html += `<p class="loadnote">Showing ${S.events.length} of ${S.total} events. Some dates couldn’t be loaded.</p>`;
+  main.innerHTML = html;
+}
+
+function clearFilters(){
+  S.q = ""; $("#q").value = ""; S.when = null; S.free = false; S.venue = null; S.genre = ""; S.genreIds = null;
+  renderChips(); renderList();
+}
+
+/* ---------- Detail ---------- */
+const contentCache = new Map();
+function longDate(e){
+  if (e.when == null) return e.dateLabel;
+  return new Date(e.when).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+}
+function openEvent(id, push = true){
+  const e = S.byId.get(+id) || S.saved[id];
+  if (!e) return;
+  S.openId = e.id;
+  if (push) history.pushState({ id: e.id }, "", "#event-" + e.id);
+  document.title = e.title + " – Band on the Wall";
+  $("#detail").innerHTML = `
+    <img class="hero" src="${esc(e.img2 || e.img1)}" alt="">
+    <h1 class="dtitle" id="dtitle">${esc(e.title)}</h1>
+    ${e.tagline ? `<p class="dtag">${esc(e.tagline)}</p>` : ""}
+    <dl class="facts">
+      <dt>Date</dt><dd>${esc(longDate(e))}</dd>
+      <dt>Starts</dt><dd>${esc(niceTime(e.timeLabel))}</dd>
+      <dt>Venue</dt><dd>${esc(e.venue || "Band on the Wall")}</dd>
+      ${e.soldOut ? `<dt>Tickets</dt><dd>Sold out</dd>` : e.free ? `<dt>Entry</dt><dd>Free</dd>` : ""}
+    </dl>
+    <div class="copy" id="copy"><p>${esc(e.summary)}</p></div>
+    <div class="actions">
+      <button class="btn secondary" id="calBtn">Add to calendar</button>
+      ${e.url ? `<a class="btn secondary" href="${esc(e.url)}" target="_blank" rel="noopener">View on website</a>` : ""}
+    </div>`;
+  const bar = $("#buybar");
+  const buy = e.soldOut
+    ? `<button class="btn primary" disabled>Sold out</button>`
+    : e.buy ? `<a class="btn primary" href="${esc(e.buy)}" target="_blank" rel="noopener">${esc(e.buyText === "Tickets" ? "Get tickets" : e.buyText)}</a>`
+    : e.free ? `<span class="btn secondary" aria-disabled="true">Free entry</span>`
+    : e.url ? `<a class="btn primary" href="${esc(e.url)}" target="_blank" rel="noopener">Details</a>` : "";
+  bar.innerHTML = `<div class="when"><strong>${esc(e.title)}</strong>${esc(e.dateLabel)}, ${esc(niceTime(e.timeLabel))}</div>${buy}`;
+  $("#calBtn").onclick = () => addToCalendar(e);
+  syncSaveBtn();
+  $("#sheet").scrollTop = 0;
+  $("#sheet").classList.add("open"); bar.classList.add("show");
+  document.body.style.overflow = "hidden";
+  setTimeout(() => $("#closeBtn").focus({ preventScroll: true }), 50);
+  loadFullContent(e);
+}
+function closeEvent(fromPop = false){
+  if (!S.openId) return;
+  const id = S.openId; S.openId = null;
+  $("#sheet").classList.remove("open"); $("#buybar").classList.remove("show");
+  document.body.style.overflow = "";
+  document.title = "Band on the Wall – What’s On";
+  if (!fromPop && history.state && history.state.id) history.back();
+  const card = document.querySelector(`.ev[data-id="${id}"]`); if (card) card.focus({ preventScroll: true });
+}
+function syncSaveBtn(){
+  const on = !!(S.openId && S.saved[S.openId]);
+  $("#saveBtn").setAttribute("aria-pressed", on);
+  $("#saveBtn").setAttribute("aria-label", on ? "Remove from saved" : "Save event");
+  $("#saveIcon").setAttribute("fill", on ? "currentColor" : "none");
+}
+
+/* Try WordPress's standard API for the full write-up; falls back to the summary if the event type isn't exposed. */
+async function loadFullContent(e){
+  let html = contentCache.get(e.id);
+  if (html === undefined){
+    html = null;
+    for (const base of ["event", "events"]){
+      try {
+        const j = await getJSON(`${API}/wp/v2/${base}/${e.id}?_fields=content`);
+        if (j && j.content && j.content.rendered){ html = j.content.rendered; break; }
+      } catch {}
+    }
+    contentCache.set(e.id, html);
+  }
+  if (html && S.openId === e.id) $("#copy").innerHTML = sanitize(html);
+}
+function sanitize(html){
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  doc.querySelectorAll("script,style,form,object,embed,link,meta").forEach(n => n.remove());
+  doc.querySelectorAll("iframe").forEach(f => {
+    if (!/^https:\/\/(www\.)?(youtube(-nocookie)?\.com|player\.vimeo\.com|open\.spotify\.com|w\.soundcloud\.com|bandcamp\.com)\//.test(f.src)) f.remove();
+    else f.setAttribute("loading", "lazy");
+  });
+  doc.querySelectorAll("*").forEach(n => {
+    [...n.attributes].forEach(a => {
+      if (/^on/i.test(a.name) || /^javascript:/i.test(a.value) || a.name === "style") n.removeAttribute(a.name);
+    });
+    if (n.tagName === "A"){ n.target = "_blank"; n.rel = "noopener"; }
+    if (n.tagName === "IMG"){ n.loading = "lazy"; n.removeAttribute("width"); n.removeAttribute("height"); }
+  });
+  return doc.body.innerHTML;
+}
+
+/* ---------- Calendar & share ---------- */
+function icsDate(d){ const p = n => String(n).padStart(2, "0"); return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}T${p(d.getHours())}${p(d.getMinutes())}00`; }
+function icsText(s){ return String(s).replace(/[\\,;]/g, m => "\\" + m).replace(/\n/g, "\\n"); }
+function addToCalendar(e){
+  if (e.when == null) return toast("This event has no date yet");
+  const start = new Date(e.when), end = new Date(e.when + 3 * 36e5);
+  const ics = [
+    "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Band on the Wall//Whats On//EN","BEGIN:VEVENT",
+    "UID:botw-" + e.id + "@bandonthewall.org",
+    "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z",
+    "DTSTART;TZID=Europe/London:" + icsDate(start),
+    "DTEND;TZID=Europe/London:" + icsDate(end),
+    "SUMMARY:" + icsText(e.title),
+    "LOCATION:" + icsText((e.venue ? e.venue + ", " : "") + "Band on the Wall, 25 Swan Street, Manchester M4 5JZ"),
+    "DESCRIPTION:" + icsText((e.tagline ? e.tagline + "\n" : "") + (e.url || "")),
+    e.url ? "URL:" + e.url : "",
+    "END:VEVENT","END:VCALENDAR"
+  ].filter(Boolean).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+  a.download = (e.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "event") + ".ics";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+async function shareEvent(){
+  const e = S.byId.get(S.openId) || S.saved[S.openId]; if (!e) return;
+  const url = e.url || location.href;
+  if (navigator.share){ try { await navigator.share({ title: e.title, text: `${e.title} at Band on the Wall, ${e.dateLabel}`, url }); } catch {} return; }
+  try { await navigator.clipboard.writeText(url); toast("Link copied"); } catch { toast(url); }
+}
+let toastTimer;
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1800); }
+
+/* ---------- Genre filter ----------
+   The feed doesn't include each event's genre, so we check whether the endpoint accepts a genre
+   parameter. If it does, the genre menu appears; if not, it stays hidden rather than showing a broken filter. */
+async function detectGenreFilter(filters, baseTotal){
+  const genres = (filters && filters.event_genre) || [];
+  if (!genres.length || !baseTotal) return;
+  const g = genres[0];
+  const tries = [["event_genre", "key"], ["event_genre", "slug"], ["genre", "key"], ["genre", "slug"]];
+  for (const [param, field] of tries){
+    try {
+      const j = await getJSON(withParams(FEED, { [param]: g[field], page: 1 }));
+      const t = +j.meta?.total;
+      if (t >= 0 && t < baseTotal){
+        S.genreParam = { param, field };
+        S.genres = genres.map(x => ({ value: x[field], label: decode(x.label) }));
+        renderChips(); return;
+      }
+    } catch {}
+  }
+}
+const genreCache = new Map();
+async function applyGenre(value){
+  S.genre = value;
+  if (!value){ S.genreIds = null; renderChips(); renderList(); return; }
+  renderChips();
+  if (!genreCache.has(value)){
+    $("#list").innerHTML = `<p class="loadnote">Finding events…</p>`;
+    try {
+      const { rows } = await fetchAll({ [S.genreParam.param]: value });
+      genreCache.set(value, new Set(rows.map(r => r.ID)));
+    } catch { toast("That genre couldn’t be loaded"); S.genre = ""; S.genreIds = null; renderChips(); renderList(); return; }
+  }
+  if (S.genre === value){ S.genreIds = genreCache.get(value); renderList(); }
+}
+
+/* ---------- Events ---------- */
+$("#chips").addEventListener("click", ev => {
+  const b = ev.target.closest("button.chip"); if (!b) return;
+  if (b.dataset.when) S.when = S.when === b.dataset.when ? null : b.dataset.when;
+  else if ("free" in b.dataset) S.free = !S.free;
+  else if (b.dataset.venue) S.venue = S.venue === b.dataset.venue ? null : b.dataset.venue;
+  renderChips(); renderList();
+});
+$("#chips").addEventListener("change", ev => { if (ev.target.id === "genre") applyGenre(ev.target.value); });
+$("#list").addEventListener("click", ev => { const c = ev.target.closest(".ev[data-id]"); if (c) openEvent(c.dataset.id); });
+let qTimer;
+$("#q").addEventListener("input", ev => { clearTimeout(qTimer); qTimer = setTimeout(() => { S.q = ev.target.value.trim(); renderList(); }, 120); });
+function setView(v){
+  S.view = v;
+  $("#tab-all").setAttribute("aria-selected", v === "all");
+  $("#tab-saved").setAttribute("aria-selected", v === "saved");
+  renderChips(); renderList(); window.scrollTo({ top: 0 });
+}
+$("#tab-all").onclick = () => setView("all");
+$("#tab-saved").onclick = () => setView("saved");
+$("#closeBtn").onclick = () => closeEvent();
+$("#saveBtn").onclick = () => { const e = S.byId.get(S.openId) || S.saved[S.openId]; if (e) toggleSaved(e); };
+$("#shareBtn").onclick = shareEvent;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeEvent(); });
+window.addEventListener("popstate", () => {
+  const m = /^#event-(\d+)$/.exec(location.hash);
+  if (m) openEvent(m[1], false); else closeEvent(true);
+});
+window.addEventListener("resize", measureHead);
+
+/* ---------- Start ---------- */
+function addRows(rows){
+  for (const r of rows){
+    if (!r || r.ID == null || S.byId.has(r.ID)) continue;
+    const e = normalise(r); S.byId.set(e.id, e); S.events.push(e);
+    if (S.saved[e.id]) S.saved[e.id] = e; // keep saved copies fresh
+  }
+}
+async function init(){
+  S.loading = true; S.error = null; renderChips(); renderList();
+  const filtersP = getJSON(FILTERS).catch(() => null);
+  try {
+    const { rows, meta, partial } = await fetchAll({}, (first, m) => {
+      addRows(first); S.total = +m.total || first.length; renderChips(); renderList();
+    });
+    addRows(rows); S.partial = partial; persistSaved();
+    S.loading = false; renderChips(); renderList();
+    detectGenreFilter(await filtersP, S.total);
+  } catch (err){
+    S.loading = false; S.error = err; renderList();
+  }
+  const m = /^#event-(\d+)$/.exec(location.hash);
+  if (m){ history.replaceState(null, "", location.pathname + location.search); openEvent(m[1]); }
+}
+init();
+</script>
+</body>
+</html>
